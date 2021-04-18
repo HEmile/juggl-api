@@ -113,7 +113,7 @@ export interface IMergedToGraph {
 
 export const MD_VIEW_TYPE = 'markdown';
 
-export class JugglPlugin extends Plugin {
+export interface IJugglPlugin extends Plugin {
     path: string;
     vault: Vault;
     metadata: MetadataCache
@@ -121,21 +121,21 @@ export class JugglPlugin extends Plugin {
     stores: IDataStore[] ;
 
 
-    public openFileFromNode(node: NodeSingular, newLeaf?: boolean): Promise<TFile>;
+    openFileFromNode(node: NodeSingular, newLeaf?: boolean): Promise<TFile>;
 
     openLocalGraph(name: string): void;
 
     openGlobalGraph(): void;
 
-    public getClasses(file: TFile): string[];
+    getClasses(file: TFile): string[];
 
-    public parseTypedLink(link: ReferenceCache, line: string): ITypedLink;
+    parseTypedLink(link: ReferenceCache, line: string): ITypedLink;
 
-    public activeGraphs(): IJuggl[];
+    activeGraphs(): IJuggl[];
 
-    public registerStore(store: IDataStore): void;
+    registerStore(store: IDataStore): void;
 
-    public registerCoreStore(store: ICoreDataStore, name: string): void;
+    registerCoreStore(store: ICoreDataStore, name: string): void;
 }
 
 export type FDGDLayouts = 'cola'| 'd3-force';
