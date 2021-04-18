@@ -9,6 +9,7 @@ import {
   Events, MetadataCache,
   Vault,
   Workspace,
+  Plugin,
 } from 'obsidian';
 import type {
   Core,
@@ -113,7 +114,7 @@ export interface IMergedToGraph {
 
 export const MD_VIEW_TYPE = 'markdown';
 
-export interface IJugglPlugin extends Plugin {
+export interface IJugglPlugin extends Plugin{
     path: string;
     vault: Vault;
     metadata: MetadataCache
