@@ -232,9 +232,6 @@ export interface IJuggl extends Component {
     mode: IAGMode;
     vizReady: boolean;
 
-    constructor(element: Element, plugin: IJugglPlugin, dataStores: IJugglStores, settings: IJugglSettings, initialNodes?: string[]);
-
-
     neighbourhood(toExpand: VizId[]) : Promise<NodeDefinition[]>;
 
     buildEdges(newNodes: NodeCollection): Promise<EdgeDefinition[]>;
