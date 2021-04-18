@@ -20,7 +20,7 @@ export function getClasses(file: TFile): string[];
 
 export interface LayoutSettings {
 
-    startLayout(view: Juggl): Layouts;
+    startLayout(view: IJuggl): Layouts;
 
     options: LayoutOptions;
 
@@ -53,9 +53,9 @@ export interface IDataStore extends Component {
 
     getNeighbourhood(nodeId: VizId[]): Promise<NodeDefinition[]>;
 
-    connectNodes(allNodes: NodeCollection, newNodes: NodeCollection, graph: Juggl): Promise<EdgeDefinition[]>;
+    connectNodes(allNodes: NodeCollection, newNodes: NodeCollection, graph: IJuggl): Promise<EdgeDefinition[]>;
 
-    refreshNode(view: Juggl, id: VizId): void | Promise<void>;
+    refreshNode(view: IJuggl, id: VizId): void | Promise<void>;
 
     // Prefix of id of nodes from this store
     storeId(): string;
@@ -113,7 +113,7 @@ export interface IMergedToGraph {
 
 export const MD_VIEW_TYPE = 'markdown';
 
-export default class JugglPlugin extends Plugin {
+export class JugglPlugin extends Plugin {
     path: string;
     vault: Vault;
     metadata: MetadataCache
@@ -131,7 +131,7 @@ export default class JugglPlugin extends Plugin {
 
     public parseTypedLink(link: ReferenceCache, line: string): ITypedLink;
 
-    public activeGraphs(): Juggl[];
+    public activeGraphs(): IJuggl[];
 
     public registerStore(store: IDataStore): void;
 
@@ -208,14 +208,14 @@ export class GraphStyleSheet {
     yamlModifySheet: string;
     plugin: JugglPlugin;
 
-    getStylesheet(viz: Juggl): Promise<string> ;
+    getStylesheet(viz: IJuggl): Promise<string> ;
 
     styleGroupsToSheet(groups: StyleGroup[], groupPrefix: string): string;
 
     getDefaultStylesheet(): string;
 }
 
-export class Juggl extends Component {
+export interface IJuggl extends Component {
     element: Element;
     workspace: Workspace;
     settings: IJugglSettings;
@@ -256,15 +256,15 @@ export class Juggl extends Component {
 
     onGraphChanged(batch?:boolean, debounceLayout?: boolean): void;
 
-    public setMode(modeName: string): void;
+    setMode(modeName: string): void;
 
     searchFilter(query: string): void;
 
-    public getPinned(): NodeCollection;
+    getPinned(): NodeCollection;
 
-    public getExpanded(): NodeCollection;
+    getExpanded(): NodeCollection;
 
-    public getProtected(): NodeCollection;
+    getProtected(): NodeCollection;
 
     on(name:'stylesheet', callback: (sheet: GraphStyleSheet) => any): EventRef;
     on(name: 'expand', callback: (elements: NodeCollection) => any): EventRef;
