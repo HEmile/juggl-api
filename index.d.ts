@@ -206,7 +206,7 @@ defaultSheet comes before graph.css, yamlModifySheet comes after.
 export class GraphStyleSheet {
     defaultSheet: string;
     yamlModifySheet: string;
-    plugin: JugglPlugin;
+    plugin: IJugglPlugin;
 
     getStylesheet(viz: IJuggl): Promise<string> ;
 
@@ -221,7 +221,7 @@ export interface IJuggl extends Component {
     settings: IJugglSettings;
     initialNodes: string[];
     vault: Vault;
-    plugin: JugglPlugin;
+    plugin: IJugglPlugin;
     viz: Core;
     selectName: string;
     events: Events;
@@ -231,7 +231,7 @@ export interface IJuggl extends Component {
     mode: IAGMode;
     vizReady: boolean;
 
-    constructor(element: Element, plugin: JugglPlugin, dataStores: IJugglStores, settings: IJugglSettings, initialNodes?: string[]);
+    constructor(element: Element, plugin: IJugglPlugin, dataStores: IJugglStores, settings: IJugglSettings, initialNodes?: string[]);
 
 
     neighbourhood(toExpand: VizId[]) : Promise<NodeDefinition[]>;
