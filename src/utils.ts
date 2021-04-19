@@ -36,14 +36,7 @@ export class VizId {
     }
 
     static fromFile(file: TFile): VizId {
-      const name = file.extension === 'md' ? file.basename : file.name;
-      return new VizId(name, 'core');
-    }
-
-    static fromPath(path: string): VizId {
-      const pth = require('path');
-      const name = pth.basename(path, '.md');
-      return new VizId(name, 'core');
+      return new VizId(file.name, 'core');
     }
 
     static toId(id: string, storeId: string) : string {
