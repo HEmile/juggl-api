@@ -25,13 +25,7 @@ class VizId {
         return nodes.map((n) => VizId.fromNode(n));
     }
     static fromFile(file) {
-        const name = file.extension === 'md' ? file.basename : file.name;
-        return new VizId(name, 'core');
-    }
-    static fromPath(path) {
-        const pth = require('path');
-        const name = pth.basename(path, '.md');
-        return new VizId(name, 'core');
+        return new VizId(file.name, 'core');
     }
     static toId(id, storeId) {
         return new VizId(id, storeId).toId();
