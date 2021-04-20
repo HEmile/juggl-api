@@ -11,6 +11,7 @@ import {MetadataCache, parseFrontMatterStringArray, parseFrontMatterTags} from '
 import {ITypedLink, ITypedLinkProperties} from '../index';
 
 const CAT_DANGLING = 'dangling';
+const CORE_STORE_ID = 'core';
 
 export class VizId {
     id: string;
@@ -121,7 +122,7 @@ export const nodeFromFile = async function(file: TFile, plugin: Plugin) : Promis
   const name = file.extension === 'md' ? file.basename : file.name;
   const classes = getClasses(file, plugin.app.metadataCache).join(' ');
   const data = {
-    id: VizId.toId(file.name, this.storeId()),
+    id: VizId.toId(file.name, CORE_STORE_ID),
     name: name,
     path: file.path,
   } as NodeDataDefinition;
@@ -166,7 +167,7 @@ export const nodeDangling = function(path: string): NodeDefinition {
   return {
     group: 'nodes',
     data: {
-      id: VizId.toId(path, this.storeId()),
+      id: VizId.toId(path, CORE_STORE_ID),
       name: path,
     },
     classes: 'dangling',

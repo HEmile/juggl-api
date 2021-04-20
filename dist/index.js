@@ -5,6 +5,7 @@
 }(this, (function (exports, obsidian) { 'use strict';
 
     const CAT_DANGLING = 'dangling';
+    const CORE_STORE_ID = 'core';
     class VizId {
         constructor(id, storeId) {
             this.id = id;
@@ -106,7 +107,7 @@
         const name = file.extension === 'md' ? file.basename : file.name;
         const classes = getClasses(file, plugin.app.metadataCache).join(' ');
         const data = {
-            id: VizId.toId(file.name, this.storeId()),
+            id: VizId.toId(file.name, CORE_STORE_ID),
             name: name,
             path: file.path,
         };
@@ -153,7 +154,7 @@
         return {
             group: 'nodes',
             data: {
-                id: VizId.toId(path, this.storeId()),
+                id: VizId.toId(path, CORE_STORE_ID),
                 name: path,
             },
             classes: 'dangling',

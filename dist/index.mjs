@@ -1,6 +1,7 @@
 import { parseFrontMatterTags, parseFrontMatterStringArray } from 'obsidian';
 
 const CAT_DANGLING = 'dangling';
+const CORE_STORE_ID = 'core';
 class VizId {
     constructor(id, storeId) {
         this.id = id;
@@ -102,7 +103,7 @@ const nodeFromFile = async function (file, plugin) {
     const name = file.extension === 'md' ? file.basename : file.name;
     const classes = getClasses(file, plugin.app.metadataCache).join(' ');
     const data = {
-        id: VizId.toId(file.name, this.storeId()),
+        id: VizId.toId(file.name, CORE_STORE_ID),
         name: name,
         path: file.path,
     };
@@ -149,7 +150,7 @@ const nodeDangling = function (path) {
     return {
         group: 'nodes',
         data: {
-            id: VizId.toId(path, this.storeId()),
+            id: VizId.toId(path, CORE_STORE_ID),
             name: path,
         },
         classes: 'dangling',
