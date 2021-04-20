@@ -7,7 +7,7 @@ import type {
   NodeSingular,
 } from 'cytoscape';
 import type {TagCache, TFile, Plugin, ReferenceCache} from 'obsidian';
-import {parseFrontMatterStringArray, parseFrontMatterTags} from 'obsidian';
+import {MetadataCache, parseFrontMatterStringArray, parseFrontMatterTags} from 'obsidian';
 import {ITypedLink, ITypedLinkProperties} from '../index';
 
 const CAT_DANGLING = 'dangling';
@@ -66,7 +66,7 @@ const _parseTags = function(tags: string[]): string[] {
       }));
 };
 
-export const getClasses = function(file: TFile): string[] {
+export const getClasses = function(file: TFile, metadataCache: MetadataCache): string[] {
   if (file) {
     const classes = [];
     if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff'].contains(file.extension)) {
@@ -87,7 +87,7 @@ export const getClasses = function(file: TFile): string[] {
     // }
     if (file.extension === 'md') {
       classes.push('note');
-      const cache = this.app.metadataCache.getFileCache(file);
+      const cache = metadataCache.getFileCache(file);
       if (cache?.frontmatter) {
         if ('image' in cache.frontmatter) {
           classes.push('image');
@@ -119,7 +119,7 @@ export const getClasses = function(file: TFile): string[] {
 export const nodeFromFile = async function(file: TFile, plugin: Plugin) : Promise<NodeDefinition> {
   const cache = plugin.app.metadataCache.getFileCache(file);
   const name = file.extension === 'md' ? file.basename : file.name;
-  const classes = getClasses(file).join(' ');
+  const classes = getClasses(file, plugin.app.metadataCache).join(' ');
   const data = {
     id: VizId.toId(file.name, this.storeId()),
     name: name,

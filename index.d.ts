@@ -17,7 +17,7 @@ import type {
 } from 'cytoscape';
 import Timeout = NodeJS.Timeout;
 
-export function getClasses(file: TFile): string[];
+export function getClasses(file: TFile, metadataCache: MetadataCache): string[];
 
 export function nodeFromFile(file: TFile, plugin: Plugin): Promise<NodeDefinition>;
 
