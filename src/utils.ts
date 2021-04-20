@@ -1,6 +1,14 @@
-import type {NodeCollection, NodeSingular} from 'cytoscape';
-import type {TagCache, TFile} from 'obsidian';
+import type {
+  EdgeDataDefinition,
+  EdgeDefinition,
+  NodeCollection,
+  NodeDataDefinition,
+  NodeDefinition,
+  NodeSingular,
+} from 'cytoscape';
+import type {TagCache, TFile, Plugin, ReferenceCache} from 'obsidian';
 import {parseFrontMatterStringArray, parseFrontMatterTags} from 'obsidian';
+import {ITypedLink, ITypedLinkProperties} from '../index';
 
 const CAT_DANGLING = 'dangling';
 
@@ -106,4 +114,137 @@ export const getClasses = function(file: TFile): string[] {
     return classes;
   }
   return [CAT_DANGLING];
+};
+
+export const nodeFromFile = async function(file: TFile, plugin: Plugin) : Promise<NodeDefinition> {
+  const cache = plugin.app.metadataCache.getFileCache(file);
+  const name = file.extension === 'md' ? file.basename : file.name;
+  const classes = getClasses(file).join(' ');
+  const data = {
+    id: VizId.toId(file.name, this.storeId()),
+    name: name,
+    path: file.path,
+  } as NodeDataDefinition;
+  if (file.extension in ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff']) {
+    try {
+      // @ts-ignore
+      data['resource_url'] = `http://localhost:${plugin.settings.imgServerPort}/${encodeURI(file.path)}`;
+    } catch {}
+  }
+  data['content'] = await plugin.app.vault.cachedRead(file);
+  const frontmatter = cache?.frontmatter;
+  if (frontmatter) {
+    Object.keys(frontmatter).forEach((k) => {
+      if (!(k === 'position')) {
+        if (k === 'image') {
+          const imageField = frontmatter[k];
+          try {
+            // Check if url. throws error otherwise
+            new URL(imageField);
+            data[k] = imageField;
+          } catch {
+            try {
+              // @ts-ignore
+              data[k] = `http://localhost:${plugin.settings.imgServerPort}/${encodeURI(imageField)}`;
+            } catch {}
+          }
+        } else {
+          data[k] = frontmatter[k];
+        }
+      }
+    });
+  }
+
+  return {
+    group: 'nodes',
+    data: data,
+    classes: classes,
+  };
+};
+
+export const nodeDangling = function(path: string): NodeDefinition {
+  return {
+    group: 'nodes',
+    data: {
+      id: VizId.toId(path, this.storeId()),
+      name: path,
+    },
+    classes: 'dangling',
+  };
+};
+
+export const wikilinkRegex = '\\[\\[([^\\]\\r\\n]+?)\\]\\]';
+export const nameRegex = '[^\\W\\d]\\w*';
+
+const regexEscape = function(str: string) {
+  return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
+export const parseTypedLink = function(link: ReferenceCache, line: string, typedLinkPrefix: string): ITypedLink {
+  // TODO: This is something specific I use, but shouldn't keep being in this repo.
+  const regexPublishedIn = new RegExp(
+      `^${regexEscape(typedLinkPrefix)} (publishedIn) (\\d\\d\\d\\d) (${wikilinkRegex},? *)+$`);
+  const matchPI = regexPublishedIn.exec(line);
+  if (!(matchPI === null)) {
+    return {
+      class: 'type-publishedIn',
+      isInline: false,
+      properties: {
+        year: matchPI[2],
+        context: '',
+        type: 'publishedIn',
+      } as ITypedLinkProperties,
+    } as ITypedLink;
+  }
+
+  // Intuition: Start with the typed link prefix. Then a neo4j name (nameRegex).
+  // Then one or more of the wikilink group: wikilink regex separated by optional comma and multiple spaces
+  const regex = new RegExp(
+      `^${regexEscape(typedLinkPrefix)} (${nameRegex}) (${wikilinkRegex},? *)+$`);
+  const match = regex.exec(line);
+  const splitLink = link.original.split('|');
+  let alias = null;
+  if (splitLink.length > 1) {
+    alias = splitLink.slice(1).join().slice(0, -2);
+  }
+  if (!(match === null)) {
+    return {
+      class: `type-${match[1]}`,
+      isInline: false,
+      properties: {
+        alias: alias,
+        context: '',
+        type: match[1],
+      } as ITypedLinkProperties,
+    } as ITypedLink;
+  }
+  return null;
+};
+
+export const parseRefCache = function(ref: ReferenceCache, content: string[], id: string, source: string, target: string, typedLinkPrefix: string): EdgeDefinition {
+  const line = content[ref.position.start.line];
+  let data = {
+    id: id,
+    source: source,
+    target: target,
+    context: line,
+    edgeCount: 1,
+  } as EdgeDataDefinition;
+  const splitLink = ref.original.split('|');
+  if (splitLink.length > 1) {
+    data['alias'] = splitLink.slice(1).join().slice(0, -2);
+  }
+  let classes = '';
+  const typedLink = parseTypedLink(ref, line, typedLinkPrefix);
+  if (typedLink === null) {
+    classes = `${classes} inline`;
+  } else {
+    data = {...typedLink.properties, ...data};
+    classes = `${classes} ${typedLink.class}`;
+  }
+  return {
+    group: 'edges',
+    data: data,
+    classes: classes,
+  } as EdgeDefinition;
 };

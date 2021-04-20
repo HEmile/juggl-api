@@ -9,7 +9,7 @@ import {
   Events, MetadataCache,
   Vault,
   Workspace,
-  Plugin,
+  Plugin, App,
 } from 'obsidian';
 import type {
   Core,
@@ -18,6 +18,16 @@ import type {
 import Timeout = NodeJS.Timeout;
 
 export function getClasses(file: TFile): string[];
+
+export function nodeFromFile(file: TFile, plugin: Plugin): Promise<NodeDefinition>;
+
+export function nodeDangling(path: string): NodeDefinition;
+
+export function parseRefCache(ref: ReferenceCache, content: string[], id: string, source: string, target: string, typedLinkPrefix: string): EdgeDefinition;
+
+export function parseTypedLink(link: ReferenceCache, line: string, typedLinkPrefix: string): ITypedLink;
+
+export function getPlugin(app: App): IJugglPlugin | null;
 
 export interface LayoutSettings {
 
@@ -121,16 +131,11 @@ export interface IJugglPlugin extends Plugin{
     coreStores: Record<string, ICoreDataStore> ;
     stores: IDataStore[] ;
 
-
     openFileFromNode(node: NodeSingular, newLeaf?: boolean): Promise<TFile>;
 
     openLocalGraph(name: string): void;
 
     openGlobalGraph(): void;
-
-    getClasses(file: TFile): string[];
-
-    parseTypedLink(link: ReferenceCache, line: string): ITypedLink;
 
     activeGraphs(): IJuggl[];
 
