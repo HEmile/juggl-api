@@ -48,7 +48,7 @@
             return tags;
         }));
     };
-    const getClasses = function (file) {
+    const getClasses = function (file, metadataCache) {
         if (file) {
             const classes = [];
             if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff'].contains(file.extension)) {
@@ -72,7 +72,7 @@
             // }
             if (file.extension === 'md') {
                 classes.push('note');
-                const cache = this.app.metadataCache.getFileCache(file);
+                const cache = metadataCache.getFileCache(file);
                 if (cache?.frontmatter) {
                     if ('image' in cache.frontmatter) {
                         classes.push('image');
@@ -104,7 +104,7 @@
     const nodeFromFile = async function (file, plugin) {
         const cache = plugin.app.metadataCache.getFileCache(file);
         const name = file.extension === 'md' ? file.basename : file.name;
-        const classes = getClasses(file).join(' ');
+        const classes = getClasses(file, plugin.app.metadataCache).join(' ');
         const data = {
             id: VizId.toId(file.name, this.storeId()),
             name: name,
