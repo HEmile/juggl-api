@@ -101,9 +101,151 @@
         }
         return [CAT_DANGLING];
     };
+    const nodeFromFile = async function (file, plugin) {
+        const cache = plugin.app.metadataCache.getFileCache(file);
+        const name = file.extension === 'md' ? file.basename : file.name;
+        const classes = getClasses(file).join(' ');
+        const data = {
+            id: VizId.toId(file.name, this.storeId()),
+            name: name,
+            path: file.path,
+        };
+        if (file.extension in ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff']) {
+            try {
+                // @ts-ignore
+                data['resource_url'] = `http://localhost:${plugin.settings.imgServerPort}/${encodeURI(file.path)}`;
+            }
+            catch { }
+        }
+        data['content'] = await plugin.app.vault.cachedRead(file);
+        const frontmatter = cache?.frontmatter;
+        if (frontmatter) {
+            Object.keys(frontmatter).forEach((k) => {
+                if (!(k === 'position')) {
+                    if (k === 'image') {
+                        const imageField = frontmatter[k];
+                        try {
+                            // Check if url. throws error otherwise
+                            new URL(imageField);
+                            data[k] = imageField;
+                        }
+                        catch {
+                            try {
+                                // @ts-ignore
+                                data[k] = `http://localhost:${plugin.settings.imgServerPort}/${encodeURI(imageField)}`;
+                            }
+                            catch { }
+                        }
+                    }
+                    else {
+                        data[k] = frontmatter[k];
+                    }
+                }
+            });
+        }
+        return {
+            group: 'nodes',
+            data: data,
+            classes: classes,
+        };
+    };
+    const nodeDangling = function (path) {
+        return {
+            group: 'nodes',
+            data: {
+                id: VizId.toId(path, this.storeId()),
+                name: path,
+            },
+            classes: 'dangling',
+        };
+    };
+    const wikilinkRegex = '\\[\\[([^\\]\\r\\n]+?)\\]\\]';
+    const nameRegex = '[^\\W\\d]\\w*';
+    const regexEscape = function (str) {
+        return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    };
+    const parseTypedLink = function (link, line, typedLinkPrefix) {
+        // TODO: This is something specific I use, but shouldn't keep being in this repo.
+        const regexPublishedIn = new RegExp(`^${regexEscape(typedLinkPrefix)} (publishedIn) (\\d\\d\\d\\d) (${wikilinkRegex},? *)+$`);
+        const matchPI = regexPublishedIn.exec(line);
+        if (!(matchPI === null)) {
+            return {
+                class: 'type-publishedIn',
+                isInline: false,
+                properties: {
+                    year: matchPI[2],
+                    context: '',
+                    type: 'publishedIn',
+                },
+            };
+        }
+        // Intuition: Start with the typed link prefix. Then a neo4j name (nameRegex).
+        // Then one or more of the wikilink group: wikilink regex separated by optional comma and multiple spaces
+        const regex = new RegExp(`^${regexEscape(typedLinkPrefix)} (${nameRegex}) (${wikilinkRegex},? *)+$`);
+        const match = regex.exec(line);
+        const splitLink = link.original.split('|');
+        let alias = null;
+        if (splitLink.length > 1) {
+            alias = splitLink.slice(1).join().slice(0, -2);
+        }
+        if (!(match === null)) {
+            return {
+                class: `type-${match[1]}`,
+                isInline: false,
+                properties: {
+                    alias: alias,
+                    context: '',
+                    type: match[1],
+                },
+            };
+        }
+        return null;
+    };
+    const parseRefCache = function (ref, content, id, source, target, typedLinkPrefix) {
+        const line = content[ref.position.start.line];
+        let data = {
+            id: id,
+            source: source,
+            target: target,
+            context: line,
+            edgeCount: 1,
+        };
+        const splitLink = ref.original.split('|');
+        if (splitLink.length > 1) {
+            data['alias'] = splitLink.slice(1).join().slice(0, -2);
+        }
+        let classes = '';
+        const typedLink = parseTypedLink(ref, line, typedLinkPrefix);
+        if (typedLink === null) {
+            classes = `${classes} inline`;
+        }
+        else {
+            data = { ...typedLink.properties, ...data };
+            classes = `${classes} ${typedLink.class}`;
+        }
+        return {
+            group: 'edges',
+            data: data,
+            classes: classes,
+        };
+    };
+
+    const getPlugin = function (app) {
+        // @ts-ignore
+        if ('juggl' in app.plugins.plugins) {
+            // @ts-ignore
+            return app.plugins.plugins['juggl'];
+        }
+        return null;
+    };
 
     exports.VizId = VizId;
     exports.getClasses = getClasses;
+    exports.getPlugin = getPlugin;
+    exports.nodeDangling = nodeDangling;
+    exports.nodeFromFile = nodeFromFile;
+    exports.parseRefCache = parseRefCache;
+    exports.parseTypedLink = parseTypedLink;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
