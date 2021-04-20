@@ -111,14 +111,16 @@
             name: name,
             path: file.path,
         };
-        if (file.extension in ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff']) {
+        if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff'].contains(file.extension)) {
             try {
                 // @ts-ignore
                 data['resource_url'] = `http://localhost:${plugin.settings.imgServerPort}/${encodeURI(file.path)}`;
             }
             catch { }
         }
-        data['content'] = await plugin.app.vault.cachedRead(file);
+        if (file.extension == 'md') {
+            data['content'] = await plugin.app.vault.cachedRead(file);
+        }
         const frontmatter = cache?.frontmatter;
         if (frontmatter) {
             Object.keys(frontmatter).forEach((k) => {
