@@ -142,6 +142,8 @@ export interface IJugglPlugin extends Plugin{
     registerStore(store: IDataStore): void;
 
     registerCoreStore(store: ICoreDataStore, name: string): void;
+
+    createJuggl(el: HTMLElement, settings?: IJugglSettings, datastores?: IJugglStores, initialiNodes?: string[]): IJuggl;
 }
 
 export type FDGDLayouts = 'cola'| 'd3-force';
