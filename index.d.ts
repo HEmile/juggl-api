@@ -19,7 +19,7 @@ import Timeout = NodeJS.Timeout;
 
 export function getClasses(file: TFile, metadataCache: MetadataCache): string[];
 
-export function nodeFromFile(file: TFile, plugin: Plugin): Promise<NodeDefinition>;
+export function nodeFromFile(file: TFile, plugin: IJugglPlugin, id?: string): Promise<NodeDefinition>;
 
 export function nodeDangling(path: string): NodeDefinition;
 
