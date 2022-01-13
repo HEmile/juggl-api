@@ -143,6 +143,8 @@ export interface IJugglPlugin extends Plugin{
 
     registerCoreStore(store: ICoreDataStore, name: string): void;
 
+    defaultStores(): IJugglStores;
+
     createJuggl(el: HTMLElement, settings?: IJugglSettings, datastores?: IJugglStores, initialNodes?: string[]): IJuggl;
 }
 
