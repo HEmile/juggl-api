@@ -98,13 +98,16 @@ const getClasses = function (file, metadataCache) {
     }
     return [CAT_DANGLING];
 };
-const nodeFromFile = async function (file, plugin) {
+const nodeFromFile = async function (file, plugin, id) {
+    if (!id) {
+        id = VizId.toId(file.name, CORE_STORE_ID);
+    }
     const cache = plugin.app.metadataCache.getFileCache(file);
     const name = file.extension === 'md' ? file.basename : file.name;
     const classes = getClasses(file, plugin.app.metadataCache).join(' ');
     const data = {
-        id: VizId.toId(file.name, CORE_STORE_ID),
-        name: name,
+        id,
+        name,
         path: file.path,
     };
     if (['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'tiff'].contains(file.extension)) {
