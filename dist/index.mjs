@@ -98,7 +98,7 @@ const getClasses = function (file, metadataCache) {
     }
     return [CAT_DANGLING];
 };
-const nodeFromFile = async function (file, plugin, id) {
+const nodeFromFile = async function (file, plugin, settings, id) {
     if (!id) {
         id = VizId.toId(file.name, CORE_STORE_ID);
     }
@@ -117,7 +117,7 @@ const nodeFromFile = async function (file, plugin, id) {
         }
         catch { }
     }
-    if (file.extension == 'md') {
+    if (settings.readContent && file.extension == 'md') {
         data['content'] = await plugin.app.vault.cachedRead(file);
     }
     const frontmatter = cache?.frontmatter;

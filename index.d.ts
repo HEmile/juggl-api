@@ -19,7 +19,7 @@ import Timeout = NodeJS.Timeout;
 
 export function getClasses(file: TFile, metadataCache: MetadataCache): string[];
 
-export function nodeFromFile(file: TFile, plugin: IJugglPlugin, id?: string): Promise<NodeDefinition>;
+export function nodeFromFile(file: TFile, plugin: IJugglPlugin, settings: IJugglSettings, id?: string): Promise<NodeDefinition>;
 
 export function nodeDangling(path: string): NodeDefinition;
 
@@ -59,14 +59,13 @@ export class DataStoreEvents extends Events {
 
 export interface IDataStore extends Component {
 
-    getEvents(): DataStoreEvents;
+    getEvents(graph: IJuggl): DataStoreEvents;
 
-
-    getNeighbourhood(nodeId: VizId[]): Promise<NodeDefinition[]>;
+    getNeighbourhood(nodeId: VizId[], graph: IJuggl): Promise<NodeDefinition[]>;
 
     connectNodes(allNodes: NodeCollection, newNodes: NodeCollection, graph: IJuggl): Promise<EdgeDefinition[]>;
 
-    refreshNode(view: IJuggl, id: VizId): void | Promise<void>;
+    refreshNode(id: VizId, graph: IJuggl): void | Promise<void>;
 
     // Prefix of id of nodes from this store
     storeId(): string;
@@ -75,7 +74,7 @@ export interface IDataStore extends Component {
 
 export interface ICoreDataStore extends IDataStore {
 
-    get(nodeId: VizId): Promise<NodeDefinition>;
+    get(nodeId: VizId, graph: IJuggl): Promise<NodeDefinition>;
 }
 
 
@@ -204,6 +203,7 @@ export interface IJugglSettings {
     mode: JugglMode;
     navigator: boolean;
     openWithShift: boolean;
+    readContent: boolean;
     styleGroups: StyleGroup[];
     toolbar: boolean;
     width: string | number;

@@ -8,7 +8,7 @@ import type {
 } from 'cytoscape';
 import type {TagCache, TFile, Plugin, ReferenceCache} from 'obsidian';
 import {MetadataCache, parseFrontMatterStringArray, parseFrontMatterTags} from 'obsidian';
-import {IJugglPlugin, ITypedLink, ITypedLinkProperties} from '../index';
+import {IJugglPlugin, IJugglSettings, ITypedLink, ITypedLinkProperties} from '../index';
 
 const CAT_DANGLING = 'dangling';
 const CORE_STORE_ID = 'core';
@@ -117,7 +117,7 @@ export const getClasses = function(file: TFile, metadataCache: MetadataCache): s
   return [CAT_DANGLING];
 };
 
-export const nodeFromFile = async function(file: TFile, plugin: IJugglPlugin, id?: string) : Promise<NodeDefinition> {
+export const nodeFromFile = async function(file: TFile, plugin: IJugglPlugin, settings: IJugglSettings, id?: string) : Promise<NodeDefinition> {
   if (!id) {
     id = VizId.toId(file.name, CORE_STORE_ID);
   }
@@ -135,7 +135,7 @@ export const nodeFromFile = async function(file: TFile, plugin: IJugglPlugin, id
       data['resource_url'] = `http://localhost:${plugin.settings.imgServerPort}/${encodeURI(file.path)}`;
     } catch {}
   }
-  if (file.extension == 'md') {
+  if (settings.readContent && file.extension == 'md') {
     data['content'] = await plugin.app.vault.cachedRead(file);
   }
   const frontmatter = cache?.frontmatter;
