@@ -59,13 +59,13 @@ export class DataStoreEvents extends Events {
 
 export interface IDataStore extends Component {
 
-    getEvents(graph: IJuggl): DataStoreEvents;
+    getEvents(view: IJuggl): DataStoreEvents;
 
-    getNeighbourhood(nodeId: VizId[], graph: IJuggl): Promise<NodeDefinition[]>;
+    getNeighbourhood(nodeId: VizId[], view: IJuggl): Promise<NodeDefinition[]>;
 
-    connectNodes(allNodes: NodeCollection, newNodes: NodeCollection, graph: IJuggl): Promise<EdgeDefinition[]>;
+    connectNodes(allNodes: NodeCollection, newNodes: NodeCollection, view: IJuggl): Promise<EdgeDefinition[]>;
 
-    refreshNode(id: VizId, graph: IJuggl): void | Promise<void>;
+    refreshNode(id: VizId, view: IJuggl): void | Promise<void>;
 
     // Prefix of id of nodes from this store
     storeId(): string;
