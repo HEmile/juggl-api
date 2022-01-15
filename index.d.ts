@@ -187,6 +187,7 @@ export interface StyleGroup {
 }
 
 export interface IJugglSettings {
+    animateLayout: boolean;
     autoAddNodes: boolean;
     autoExpand: boolean;
     autoZoom: boolean;
