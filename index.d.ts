@@ -140,6 +140,8 @@ export interface IJugglPlugin extends Plugin{
 
     registerStore(store: IDataStore): void;
 
+    removeStore(store: IDataStore): void;
+
     registerCoreStore(store: ICoreDataStore, name: string): void;
 
     defaultStores(): IJugglStores;
