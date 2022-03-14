@@ -178,9 +178,6 @@ const parseTypedLink = function (link, line, typedLinkPrefix) {
                 year: matchPI[2],
                 context: '',
                 type: 'publishedIn',
-                line: link.position.start.line,
-                start: link.position.start.col,
-                end: link.position.end.col,
             },
         };
     }
@@ -201,9 +198,6 @@ const parseTypedLink = function (link, line, typedLinkPrefix) {
                 alias: alias,
                 context: '',
                 type: match[1],
-                line: link.position.start.line,
-                start: link.position.start.col,
-                end: link.position.end.col,
             },
         };
     }
@@ -217,6 +211,9 @@ const parseRefCache = function (ref, content, id, source, target, typedLinkPrefi
         target: target,
         context: line,
         edgeCount: 1,
+        line: ref.position.start.line,
+        start: ref.position.start.col,
+        end: ref.position.end.col,
     };
     const splitLink = ref.original.split('|');
     if (splitLink.length > 1) {

@@ -182,9 +182,6 @@
                     year: matchPI[2],
                     context: '',
                     type: 'publishedIn',
-                    line: link.position.start.line,
-                    start: link.position.start.col,
-                    end: link.position.end.col,
                 },
             };
         }
@@ -205,9 +202,6 @@
                     alias: alias,
                     context: '',
                     type: match[1],
-                    line: link.position.start.line,
-                    start: link.position.start.col,
-                    end: link.position.end.col,
                 },
             };
         }
@@ -221,6 +215,9 @@
             target: target,
             context: line,
             edgeCount: 1,
+            line: ref.position.start.line,
+            start: ref.position.start.col,
+            end: ref.position.end.col,
         };
         const splitLink = ref.original.split('|');
         if (splitLink.length > 1) {

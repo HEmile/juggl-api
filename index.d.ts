@@ -41,9 +41,6 @@ export interface ITypedLinkProperties {
     context: string;
     type: string;
     alias?: string;
-    line: number;
-    start: number;
-    end: number;
     [key: string]: any;
 }
 
