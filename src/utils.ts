@@ -199,6 +199,9 @@ export const parseTypedLink = function(link: ReferenceCache, line: string, typed
         year: matchPI[2],
         context: '',
         type: 'publishedIn',
+        line: link.position.start.line,
+        start: link.position.start.col,
+        end: link.position.end.col,
       } as ITypedLinkProperties,
     } as ITypedLink;
   }
@@ -221,6 +224,9 @@ export const parseTypedLink = function(link: ReferenceCache, line: string, typed
         alias: alias,
         context: '',
         type: match[1],
+        line: link.position.start.line,
+        start: link.position.start.col,
+        end: link.position.end.col,
       } as ITypedLinkProperties,
     } as ITypedLink;
   }

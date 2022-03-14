@@ -178,6 +178,9 @@ const parseTypedLink = function (link, line, typedLinkPrefix) {
                 year: matchPI[2],
                 context: '',
                 type: 'publishedIn',
+                line: link.position.start.line,
+                start: link.position.start.col,
+                end: link.position.end.col,
             },
         };
     }
@@ -198,6 +201,9 @@ const parseTypedLink = function (link, line, typedLinkPrefix) {
                 alias: alias,
                 context: '',
                 type: match[1],
+                line: link.position.start.line,
+                start: link.position.start.col,
+                end: link.position.end.col,
             },
         };
     }
