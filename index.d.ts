@@ -138,7 +138,8 @@ export interface IJugglPlugin extends Plugin{
     vault: Vault;
     metadata: MetadataCache
     coreStores: Record<string, ICoreDataStore> ;
-    stores: IDataStore[] ;
+    stores: IDataStore[];
+    eventHandlers: IJugglEvents[];
 
     openFileFromNode(node: NodeSingular, newLeaf?: boolean): Promise<TFile>;
 
@@ -154,9 +155,9 @@ export interface IJugglPlugin extends Plugin{
 
     registerCoreStore(store: ICoreDataStore, name: string): void;
 
-    registerEvents(handler: IJugglEvents, name: string);
+    registerEvents(handler: IJugglEvents);
 
-    removeEvents(name: string);
+    removeEvents(handler: IJugglEvents);
 
     defaultStores(): IJugglStores;
 
