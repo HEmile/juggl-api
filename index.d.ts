@@ -118,11 +118,6 @@ export interface IJugglEvents {
     // Before populating with nodes
     onJugglCreated(viz: IJuggl): void;
 
-    // After populating with nodes
-    onJugglInitialized(viz: IJuggl): void;
-
-    onLayoutRefresh(viz: IJuggl, options: LayoutOptions);
-
     onJugglDestroyed(viz: IJuggl): void;
 }
 
@@ -299,6 +294,7 @@ export interface IJuggl extends Component {
     on(name: 'selectChange', callback: () => any): EventRef;
     on(name: 'elementsChange', callback: () => any): EventRef;
     on(name: 'vizReady', callback: (viz: Core) => any): EventRef;
+    on(name: 'layout', callback: (layout: LayoutSettings) => any): EventRef;
     on(name: string, callback: (...data: any) => any, ctx?: any): EventRef;
     off(name: string, callback: (...data: any) => any): void;
     offref(ref: EventRef): void;
