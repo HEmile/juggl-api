@@ -215,6 +215,7 @@ const parseRefCache = function (ref, content, id, source, target, typedLinkPrefi
         start: ref.position.start.col,
         end: ref.position.end.col,
     };
+    console.log(ref);
     const splitLink = ref.original.split('|');
     if (splitLink.length > 1) {
         data['alias'] = splitLink.slice(1).join().slice(0, -2);

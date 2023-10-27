@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('obsidian')) :
     typeof define === 'function' && define.amd ? define(['exports', 'obsidian'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global['juggl-api'] = {}, global.obsidian));
-}(this, (function (exports, obsidian) { 'use strict';
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["juggl-api"] = {}, global.obsidian));
+})(this, (function (exports, obsidian) { 'use strict';
 
     const CAT_DANGLING = 'dangling';
     const CORE_STORE_ID = 'core';
@@ -219,6 +219,7 @@
             start: ref.position.start.col,
             end: ref.position.end.col,
         };
+        console.log(ref);
         const splitLink = ref.original.split('|');
         if (splitLink.length > 1) {
             data['alias'] = splitLink.slice(1).join().slice(0, -2);
@@ -256,6 +257,4 @@
     exports.parseRefCache = parseRefCache;
     exports.parseTypedLink = parseTypedLink;
 
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+}));

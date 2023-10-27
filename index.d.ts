@@ -15,7 +15,6 @@ import type {
   Core,
   ElementDefinition, Layouts,
 } from 'cytoscape';
-import Timeout = NodeJS.Timeout;
 
 export function getClasses(file: TFile, metadataCache: MetadataCache): string[];
 
@@ -115,6 +114,17 @@ export class VizId {
     static toId(id: string, storeId: string): string;
 }
 
+export interface IJugglEvents {
+    // Before populating with nodes
+    onJugglCreated(viz: IJuggl): void;
+
+    // After populating with nodes
+    onJugglInitialized(viz: IJuggl): void;
+
+    onLayoutRefresh(viz: IJuggl, options: LayoutOptions);
+
+    onJugglDestroyed(viz: IJuggl): void;
+}
 
 export interface IMergedToGraph {
     merged: Collection;
@@ -143,6 +153,10 @@ export interface IJugglPlugin extends Plugin{
     removeStore(store: IDataStore): void;
 
     registerCoreStore(store: ICoreDataStore, name: string): void;
+
+    registerEvents(handler: IJugglEvents, name: string);
+
+    removeEvents(name: string);
 
     defaultStores(): IJugglStores;
 
@@ -240,7 +254,7 @@ export interface IJuggl extends Component {
     events: Events;
     datastores: IJugglStores;
     activeLayout: Layouts;
-    hoverTimeout: Record<string, Timeout>;
+    hoverTimeout: Record<string, Object>;
     mode: IAGMode;
     vizReady: boolean;
 

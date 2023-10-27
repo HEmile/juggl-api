@@ -1,7 +1,8 @@
 import typescript from '@rollup/plugin-typescript';
 import {nodeResolve} from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import pkg from './package.json';
+import pkg from './package.json' assert {type: 'json'};
+import json from '@rollup/plugin-json';
 
 export default {
   input: 'src/index.ts',
@@ -24,6 +25,7 @@ export default {
     commonjs({
       include: ['/node_modules/'],
     }),
+    json(),
     typescript({sourceMap: true}),
     nodeResolve({browser: true,
       dedupe: ['svelte']}),

@@ -239,6 +239,9 @@ export const parseRefCache = function(ref: ReferenceCache, content: string[], id
     start: ref.position.start.col,
     end: ref.position.end.col,
   } as EdgeDataDefinition;
+
+  console.log(ref);
+
   const splitLink = ref.original.split('|');
   if (splitLink.length > 1) {
     data['alias'] = splitLink.slice(1).join().slice(0, -2);
