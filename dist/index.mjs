@@ -244,5 +244,9 @@ const getPlugin = function (app) {
     }
     return null;
 };
+const JUGGL_VIEW_TYPE = 'juggl_view';
+const JUGGL_NODES_VIEW_TYPE = 'juggl_nodes';
+const JUGGL_STYLE_VIEW_TYPE = 'juggl_style';
+const JUGGL_HELP_VIEW = 'juggl-help';
 
-export { VizId, getClasses, getPlugin, nodeDangling, nodeFromFile, parseRefCache, parseTypedLink };
+export { JUGGL_HELP_VIEW, JUGGL_NODES_VIEW_TYPE, JUGGL_STYLE_VIEW_TYPE, JUGGL_VIEW_TYPE, VizId, getClasses, getPlugin, nodeDangling, nodeFromFile, parseRefCache, parseTypedLink };

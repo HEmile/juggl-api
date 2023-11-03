@@ -28,6 +28,12 @@ export function parseTypedLink(link: ReferenceCache, line: string, typedLinkPref
 
 export function getPlugin(app: App): IJugglPlugin | null;
 
+export const JUGGL_VIEW_TYPE;
+export const JUGGL_NODES_VIEW_TYPE;
+export const JUGGL_STYLE_VIEW_TYPE;
+export const JUGGL_HELP_VIEW;
+
+
 export interface LayoutSettings {
 
     startLayout(view: IJuggl): Layouts;
@@ -302,7 +308,3 @@ export interface IJuggl extends Component {
     tryTrigger(evt: EventRef, args: any[]): void;
 }
 
-export const JUGGL_VIEW_TYPE = 'juggl_view';
-export const JUGGL_NODES_VIEW_TYPE = 'juggl_nodes';
-export const JUGGL_STYLE_VIEW_TYPE = 'juggl_style';
-export const JUGGL_HELP_VIEW = 'juggl-help';

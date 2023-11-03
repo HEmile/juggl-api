@@ -248,7 +248,15 @@
         }
         return null;
     };
+    const JUGGL_VIEW_TYPE = 'juggl_view';
+    const JUGGL_NODES_VIEW_TYPE = 'juggl_nodes';
+    const JUGGL_STYLE_VIEW_TYPE = 'juggl_style';
+    const JUGGL_HELP_VIEW = 'juggl-help';
 
+    exports.JUGGL_HELP_VIEW = JUGGL_HELP_VIEW;
+    exports.JUGGL_NODES_VIEW_TYPE = JUGGL_NODES_VIEW_TYPE;
+    exports.JUGGL_STYLE_VIEW_TYPE = JUGGL_STYLE_VIEW_TYPE;
+    exports.JUGGL_VIEW_TYPE = JUGGL_VIEW_TYPE;
     exports.VizId = VizId;
     exports.getClasses = getClasses;
     exports.getPlugin = getPlugin;
