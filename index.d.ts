@@ -212,7 +212,7 @@ export interface IJugglSettings {
     layout: JugglLayouts | LayoutOptions;
     limit: number;
     mergeEdges: boolean;
-    metaKeyHover: boolean;
+    // metaKeyHover: boolean;
     mode: JugglMode;
     navigator: boolean;
     openWithShift: boolean;
@@ -286,7 +286,7 @@ export interface IJuggl extends Component {
 
     getProtected(): NodeCollection;
 
-    on(name:'stylesheet', callback: (sheet: GraphStyleSheet) => any): EventRef;
+    on(name: 'stylesheet', callback: (sheet: GraphStyleSheet, sSheet: string) => any): EventRef;
     on(name: 'expand', callback: (elements: NodeCollection) => any): EventRef;
     on(name: 'hide', callback: (elements: NodeCollection) => any): EventRef;
     on(name: 'pin', callback: (elements: NodeCollection) => any): EventRef;
@@ -301,3 +301,8 @@ export interface IJuggl extends Component {
     trigger(name: string, ...data: any[]): void;
     tryTrigger(evt: EventRef, args: any[]): void;
 }
+
+export const JUGGL_VIEW_TYPE = 'juggl_view';
+export const JUGGL_NODES_VIEW_TYPE = 'juggl_nodes';
+export const JUGGL_STYLE_VIEW_TYPE = 'juggl_style';
+export const JUGGL_HELP_VIEW = 'juggl-help';
