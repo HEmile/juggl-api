@@ -36,7 +36,7 @@ export const JUGGL_HELP_VIEW;
 
 export interface LayoutSettings {
 
-    startLayout(view: IJuggl): Layouts;
+    startLayout(collection: Collection): Layouts;
 
     options: LayoutOptions;
 
@@ -292,15 +292,15 @@ export interface IJuggl extends Component {
 
     getProtected(): NodeCollection;
 
-    on(name: 'stylesheet', callback: (sheet: GraphStyleSheet, sSheet: string) => any): EventRef;
-    on(name: 'expand', callback: (elements: NodeCollection) => any): EventRef;
-    on(name: 'hide', callback: (elements: NodeCollection) => any): EventRef;
-    on(name: 'pin', callback: (elements: NodeCollection) => any): EventRef;
-    on(name: 'unpin', callback: (elements: NodeCollection) => any): EventRef;
-    on(name: 'selectChange', callback: () => any): EventRef;
-    on(name: 'elementsChange', callback: () => any): EventRef;
-    on(name: 'vizReady', callback: (viz: Core) => any): EventRef;
-    on(name: 'layout', callback: (layout: LayoutSettings) => any): EventRef;
+    on(name: 'stylesheet', callback: (sheet: GraphStyleSheet, sSheet: string) => void): EventRef;
+    on(name: 'expand', callback: (elements: NodeCollection) => void): EventRef;
+    on(name: 'hide', callback: (elements: NodeCollection) => void): EventRef;
+    on(name: 'pin', callback: (elements: NodeCollection) => void): EventRef;
+    on(name: 'unpin', callback: (elements: NodeCollection) => void): EventRef;
+    on(name: 'selectChange', callback: () => void): EventRef;
+    on(name: 'elementsChange', callback: () => void): EventRef;
+    on(name: 'vizReady', callback: (viz: Core) => void): EventRef;
+    on(name: 'layout', callback: (layout: LayoutSettings, toLayout: Collection) => Collection): EventRef;
     on(name: string, callback: (...data: any) => any, ctx?: any): EventRef;
     off(name: string, callback: (...data: any) => any): void;
     offref(ref: EventRef): void;
