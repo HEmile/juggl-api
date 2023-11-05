@@ -300,7 +300,7 @@ export interface IJuggl extends Component {
     on(name: 'selectChange', callback: () => void): EventRef;
     on(name: 'elementsChange', callback: () => void): EventRef;
     on(name: 'vizReady', callback: (viz: Core) => void): EventRef;
-    on(name: 'layout', callback: (layout: LayoutSettings, toLayout: Collection) => Collection): EventRef;
+    on(name: 'layout', callback: (layout: {layout: LayoutSettings, collection: Collection}) => void): EventRef;
     on(name: string, callback: (...data: any) => any, ctx?: any): EventRef;
     off(name: string, callback: (...data: any) => any): void;
     offref(ref: EventRef): void;
